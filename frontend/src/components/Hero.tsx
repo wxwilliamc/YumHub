@@ -2,7 +2,7 @@ import hero from '@/assets/hero.jpg'
 
 const Hero = () => {
   return (
-    <div className='px-8 py-8'>
+    <div className='px-32 py-8 container'>
         <img src={hero} className='w-full max-h-[600px] object-cover rounded-md '/>
     </div>
   )
