@@ -2,7 +2,9 @@ import LoadingBtn from '@/components/LoadingBtn';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { User } from '@/types';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod'
 
@@ -19,13 +21,20 @@ type UserFormData = z.infer<typeof formSchema>;
 type Props = {
     onSave: (userProfileDate: UserFormData) => void;
     isLoading: boolean;
+    currentUser: User;
 }
 
-const UserProfileForm = ({ onSave, isLoading }:Props) => {
+const UserProfileForm = ({ onSave, isLoading, currentUser }:Props) => {
 
     const form = useForm<UserFormData>({
         resolver: zodResolver(formSchema),
+        defaultValues: currentUser,
     });
+
+    useEffect(() => {
+        // call the function again once we made any changes to the form
+        form.reset(currentUser); 
+    }, [currentUser, form])
 
     return (
         <Form {...form}>
@@ -46,7 +55,7 @@ const UserProfileForm = ({ onSave, isLoading }:Props) => {
                         <FormItem>
                             <FormLabel>Email</FormLabel>
                             <FormControl>
-                                <Input {...field} disabled={isLoading} className='bg-white'/>
+                                <Input {...field} disabled className='bg-white'/>
                             </FormControl>
                         </FormItem>
                     )}
@@ -110,7 +119,7 @@ const UserProfileForm = ({ onSave, isLoading }:Props) => {
                     />
                 </div>
 
-                {isLoading ? <LoadingBtn /> : <Button type='submit' className='bg-orange-500'>Submit</Button>}
+                {isLoading ? <LoadingBtn /> : <Button type='submit' className='bg-orange-500'>{currentUser ? "Update" : "Submit"}</Button>}
             </form>
         </Form>
     )
