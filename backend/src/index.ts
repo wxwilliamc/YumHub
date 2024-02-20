@@ -12,6 +12,11 @@ const app = express(); // Create a new server
 app.use(express.json()); // Convert the body of any request we made to api server to json format
 app.use(cors());
 
+// check connection to endpoint
+app.get("/health", async (req: Request, res: Response) => {
+    res.send({ message: "Health Ok!" })
+})
+
 // /api/my/user
 app.use("/api/my/user", myUserRoute);
 
